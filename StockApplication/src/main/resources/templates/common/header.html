@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head th:fragment="common-header">
+<!-- Mobile Specific Meta -->
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+
+<title>ATYETI</title>
+</head>
+<body>
+	<div th:fragment="navbar">
+		<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+     <img alt="" src="https://atyeti.com/wp-content/uploads/2020/12/logo-8.gif" height="50" width="140" style="vertical-align:top;">
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/}">Stocks</a></li>
+             <li><a  sec:authorize="isAuthenticated()" th:href="@{/getUserOrder}">Order</a></li>
+            <li><a sec:authorize="isAuthenticated()" th:href="@{/orderHistory}">Order History</a></li>
+            <li><a th:href="@{/addFunds}">Funds</a></li>
+            <li><a sec:authorize="isAnonymous()" th:href="@{/register}">Login</a></li>
+            <li style="text-align:right;"><a sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+	</div>
+	
+<div style="margin-top: -50px;" th:fragment="notice">
+<table style="width:100%;padding:0 3px;font-size:13px;font-family: Verdana;border-collapse:collapse;border-width:0 0 1px 0;" >
+<tbody>
+<tr>
+
+<td style="width:100px;padding:4px;height:20px;background-color:#F6223F;text-align:center;color:White;font-weight:bold;">IMPORTENT</td>
+
+<td  style="background-color:rgba(246, 34, 63, 0.1);padding: 5px 0 5px 10px;color:Black;" >
+
+<div class="important-text">
+
+<marquee id="ctl00_rightContainer_ContentTable2_scrollerb" direction="alternate" scrollamount="2" style="padding-left: 30px; " onmouseover="javascript:this.stop();" onmouseout="javascript:this.start();" >
+
+<b style="color:Green;     font-size: 15px;">&#128508;
+  WELCOME   &#128508;
+  </b>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<b style="color:red">(NEW)</b><b style="color:blue;     font-size: 15px;"> SENSEX <span style="color: red;">(2536.937)&#8595;</span> </b>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<b style="color:blue;     font-size: 15px;"> NIFTY <span style="color: green;">(434536.937)&#8593;</span> </b>
+
+</marquee>
+</div>
+</td>
+
+</tr>
+</tbody>
+
+</table>
+</div>	
+	
+
+<div th:fragment="footer">
+
+<footer>
+	<p>
+		Created with <i class="fa fa-heart"></i> by
+		<a target="_blank" href="https://florin-pop.com">Atyeti @</a>
+		- Read how I created this and how you can join the challenge
+		<a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+	</p>
+</footer>
+
+
+</div>
+	<!-- script div -->
+	<div th:fragment="body-bottom-scripts">
+
+		<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js}"
+			integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+			crossorigin="anonymous"></script>
+
+		
+		<script
+		
+			th:src="@{https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE}"></script>
+	
+		<script th:src="@{js/main.js}"></script>
+		<!-- data table -->
+		<script th:src="@{js/jquery.dataTables.min.js}"></script>
+		<script th:src="@{js/dataTables.bootstrap.min.js}"></script>
+		
+		
+	</div>
+</body>
+</html>

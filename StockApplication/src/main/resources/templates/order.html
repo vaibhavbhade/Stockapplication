@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1000/xhtml" xmlns:sf="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+    <!-- data table -->
+<link th:href="@{css/jquery.dataTables.min.css}" rel="stylesheet" />
+<link th:href="@{css/dataTables.bootstrap.min.css}" rel="stylesheet" />
+  <style>
+  
+  footer {
+    background-color: #222;
+    color: #fff;
+    font-size: 14px;
+    bottom: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 999;
+}
+
+footer p {
+    margin: 10px 0;
+}
+
+footer i {
+    color: red;
+}
+
+footer a {
+    color: #3c97bf;
+    text-decoration: none;
+}
+  </style>
+  
+</head>
+
+<body>
+	<div th:replace="common/header :: navbar "/>
+	<div th:replace="common/header :: notice "/>
+<h2 style="text-align: center;color: green; ">ORDER</h2>
+
+
+<br>
+ <div class="alert alert-danger" th:if="${stocksNotAvilable}"> <p style="text-align: center;" class="text-danger"> Sorry Stocks not available of this Company !</p>
+</div>
+<div class="alert alert-danger" th:if="${lessFunds}"> <p style="text-align: center;" class="text-danger"> Opps You have less funds to buy this stock so Please Add Funds in Your Account!</p>
+</div>
+<div class="alert alert-success" th:if="${orderPlaced}"> <p style="text-align: center;color: green; "> your order has been placed successfully !</p>
+</div>
+<div class="alert alert-success" th:if="${orderUpdate}"> <p style="text-align: center;color: green; "> your order has been updated successfully !</p>
+</div>
+<br>
+<div class="container">
+<div class="table-responsive">
+			<table id="orderTable" class="table table-bordered table-hover table-striped">
+				<thead>
+					<tr>
+					<th>Sr.No</th>
+						<th>Date</th>
+						<th>Company Name</th>
+						<th>Stock Name</th>
+						<th>Invested Price</th>
+						<th>Stock Qty</th>
+						<th>Avg Price</th>
+						<th>Current Price</th>
+ 						<th>P&L</th>
+ 						<th>Opreation</th>
+					</tr>
+				</thead>
+<tbody >
+<tr th:each="order,itr:${userOrderList}" >
+<td th:text="${itr.index+1}"></td>
+<td th:text=" ${order.orderDate}"></td>
+<td th:text="${order.company.companyName}"></td>
+
+<td th:text="${order.company.stockName}"></td>
+<td style="color: green;" th:text="${order.finalprice}"></td>
+<td th:text="${order.stockQuntity}"></td>
+
+<td  th:text="${order.stockBuyPrice}"></td>
+<td ><strong th:text="${order.company.pricePerStock}" > </strong></td>
+
+<td ><span style="color: green;">+ </span><strong  style="color: green;" th:with=" ql=${order.company.pricePerStock * order.stockQuntity},pl=${order.finalprice}" th:text="${ql-pl}"></strong></td>
+<td ><a  th:href="@{/sellStock(userOrderId=${order.id})}" class="btn btn-danger" >Sell</a>&nbsp;<button  class="btn btn-success" data-toggle="modal" data-target="#myModal" th:attrappend="data-target=${order.id}" >Update Order</button>
+
+
+<div class="modal fade" id="myModal" role="dialog" th:attrappend="id=${order.id}">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                </div>
+                                <div class="modal-body">
+
+
+                                    <!--Form code start from here  -->
+
+
+                                    <!-- Form Name -->
+                                  <h4 style="text-align: center;">  <Strong >Update Order</Strong></h4><br>
+
+                                    <form class="form-horizontal"  th:action="@{/updateOrder}"
+                                          method="post">
+                                        <fieldset>
+
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="roll">Order Number</label>
+                                                <div class="col-md-4">
+
+                                                    <input id="id" path="id" name="id" type="hidden"
+                                                           placeholder="id" class="form-control input-md"
+                                                           th:value="${order.id}"/>
+
+                                                    <input id="roll" path="roll" name="roll" type="text"
+                                                           placeholder="orderid" class="form-control input-md"
+                                                           th:value="${'#ATYETI'+order.id}" readonly="readonly"/>
+
+                                                    <span th:if="${existRoll !=null}" style="color:Red;"> Already Exist !</span>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Text input-->
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="companyName">Company Name</label>
+                                                <div class="col-md-4">
+                                                    <input id="firstName" path="companyName" name="companyName"
+                                                           type="text" placeholder="companyName"
+                                                           class="form-control input-md" th:value="${order.company.companyName}"
+                                                   readonly="readonly" />
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Text input-->
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="stockName">Stock Name
+                                                </label>
+                                                <div class="col-md-4">
+                                                    <input id="lastName" path="stockName" name="stockName"
+                                                           type="text" placeholder="stockName"
+                                                           class="form-control input-md"
+                                                           th:value="${order.company.stockName}" readonly="readonly"/>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Text input-->
+
+
+
+                                            <!-- Text input-->
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="pass">Select Quantity</label>
+                                                <div class="col-md-4">
+                                                    <input id="pass" path="quantity" min="1" max="100" name="quantity"
+                                                           type="number"  placeholder="quantity"
+                                                           class="form-control input-md"
+                                                        required="required" th:value="${order.stockQuntity}" />
+                                                </div>
+                                            </div>
+
+                                            <!-- Button -->
+                                            <div class="form-group">
+                                                <label class="col-md-4 control-label" for="register"></label>
+                                                <div class="col-md-4">
+                                                        <center> 
+                                                <button  id="register" name="register" class="btn btn-success">
+                                                        Update Stock
+                                                    </button></center>
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                    </form>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+</td>
+ 					
+
+
+</tr> 
+
+</tbody>
+</table>
+</div>
+</div>
+
+	<!-- start footer Area -->
+			<div th:replace="common/header :: footer "/>
+
+	<!-- End footer Area -->
+
+	<div th:replace="common/header :: body-bottom-scripts " />
+	
+		<script>
+		$(document).ready(function() {
+			$("#orderTable").DataTable({
+				  "lengthMenu": [ [5, 10, 25, -1], [5, 10, 25, "All"] ],
+                "ordering": false,
+				stateSave: true
+			});
+		});
+	</script>
+</body>
+</html>
