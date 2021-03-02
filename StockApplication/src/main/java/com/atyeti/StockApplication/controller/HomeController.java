@@ -168,7 +168,7 @@ public class HomeController {
 		UserOrder newuserOrder = userOrderService.createUserOrder(userOrder, user, companyDetails, quantity, userFunds);
 		model.addAttribute("orderPlaced", true);
 		model.addAttribute("companyList", companyService.findCompanyDetails());
-		smsService.send(newuserOrder, user);
+		//smsService.send(newuserOrder, user);
 
 		return "home";
 	}
